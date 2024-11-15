@@ -1,0 +1,38 @@
+name: Update SDK
+
+on:
+  pull_request:
+
+jobs:
+  run-tests:
+    name: "Update SDK"
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout win32more code
+      uses: actions/checkout@v4
+      with:
+        path: "${GITHUB_WORKSPACE}/win32more"
+
+    - name: Checkout winmd-printer code
+      uses: actions/checkout@v4
+      with:
+        repository: ynkdir/winmd-printer
+        path: ${GITHUB_WORKSPACE}/winmd-printer
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.x
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.13"
+
+    - name: Test, run get_win32.ps1 v63.0.31
+      run: winmd-printer\scripts\get_win32.ps1 v63.0.31
+
+    #- name: Run win32generator
+    #  run: |
+    #    python -m win32generator
